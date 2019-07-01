@@ -30,4 +30,4 @@ docker run --privileged -v /var/run/docker.sock:/var/run/docker.sock -v /opt/cic
 For that reason it has some tweaks:
 1. `-v /var/run/docker.sock:/var/run/docker.sock` - binds inner docker unxi socket to the outer one.
 2. Sets two environment variables to run `docker login`.
-3. `--privileged` flag is required since cicd-pipeline runs docker-in-docker configuration 
+3. `--privileged` flag is required since cicd-pipeline runs docker-in-docker configuration.
