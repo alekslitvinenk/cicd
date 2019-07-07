@@ -1,16 +1,24 @@
 #!/bin/bash
 
 # Iterate all directories in $APP_INSTALL_PATH/repos
-CUR_DIR=$APP_INSTALL_PATH/repos
+REPOS=$APP_INSTALL_PATH/repos
+BADGES=$APP_INSTALL_PATH/badges
+BUILD_BADGE="$BADGES/build"
 
 function buildOnce() {
-    REPO="$1"
+    PROJECT="$1"
 
-    cd "$REPO"
+    cd "$REPOS/$PROJECT"
 
     git pull
 
     ./build.sh
+
+    if [ $? -eq 0 ]; then
+        echo "passing" >> "$BUILD_BADGE/$PROJECT.txt"
+    else
+        echo "failing" >> "$BUILD_BADGE/$PROJECT.txt"
+    fi
 
     # Update bages (script yet has to be created)
 
@@ -18,9 +26,9 @@ function buildOnce() {
     echo " "
 }
 
-cd "$CUR_DIR"
+cd "$REPOS"
 
-for entry in $(ls -d */)
+for entry in $(ls -d *)
 do
     # Launch build job in a parallel shell
     buildOnce "$entry" &
