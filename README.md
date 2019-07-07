@@ -1,6 +1,7 @@
 # 📦 CICD Pipeline
-Status:
-![Link](http://206.189.65.244/badges/build)
+Status:<br>
+
+![Link](http://206.189.65.244:8081/badges/build)
 
 A simple tool for build/test automation.
 
