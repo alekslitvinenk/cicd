@@ -4,6 +4,7 @@
 REPOS=$APP_INSTALL_PATH/repos
 BADGES=$APP_INSTALL_PATH/badges
 BUILD_BADGE="$BADGES/build"
+BUILT_BADGE="$BADGES/built"
 
 function buildOnce() {
     PROJECT="$1"
@@ -15,10 +16,12 @@ function buildOnce() {
     ./build.sh
 
     if [ $? -eq 0 ]; then
-        echo "passing" >> "$BUILD_BADGE/$PROJECT.txt"
+        echo "passing" > "$BUILD_BADGE/$PROJECT.txt"
     else
-        echo "failing" >> "$BUILD_BADGE/$PROJECT.txt"
+        echo "failing" > "$BUILD_BADGE/$PROJECT.txt"
     fi
+
+    date > "$BUILT_BADGE/$PROJECT.txt"
 
     # Update bages (script yet has to be created)
 
