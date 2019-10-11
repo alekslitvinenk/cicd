@@ -24,6 +24,7 @@ git clone <https path to your repo>
 docker run --privileged -v /var/run/docker.sock:/var/run/docker.sock -v /opt/cicd/repos:/opt/cicd/repos \
 -e DOCKER_USER=<your docker login> \
 -e DOCKER_PASSWORD=<your docker password> \
+-p 3000:3000 \
 -it alekslitvinenk/cicd-pipeline
 ```
 ℹ️ **Note:** This configuration is tailored for building and publishing docker images to Docker Hub.<br>
