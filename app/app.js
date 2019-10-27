@@ -1,7 +1,13 @@
-const http = require('http');
+const https = require('https');
 const fs = require('fs');
 const port = 3000;
 const pathPrefix = process.argv.slice(2)[0];
+const sslFilesDir = process.argv.slice(2)[1];
+
+const options = {
+  key: fs.readFileSync(`${sslFilesDir}/private.key`),
+  cert: fs.readFileSync(`${sslFilesDir}/certificate.crt`)
+};
 
 const colorMap = {
   build: {
@@ -22,7 +28,7 @@ function getBadgeColor(badge, status) {
   }
 }
 
-const server = http.createServer((req, res) => {
+const server = https.createServer(options, (req, res) => {
   if (isBadgeUrl(req.url)) {
 
     const urlSegmenst = req.url.slice(1).split("/");
