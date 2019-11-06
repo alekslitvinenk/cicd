@@ -21,7 +21,10 @@ git clone <https path to your repo>
 
 4. Run docker:
 ```
-docker run --privileged -v /var/run/docker.sock:/var/run/docker.sock -v /opt/cicd/repos:/opt/cicd/repos \
+docker run --privileged \
+-v /var/run/docker.sock:/var/run/docker.sock \
+-v /opt/cicd/repos:/opt/cicd/repos \
+-v /opt/cicd/sslfiles:/opt/cicd/sslfiles \
 -e DOCKER_USER=<your docker login> \
 -e DOCKER_PASSWORD=<your docker password> \
 -p 3000:3000 \
