@@ -1,3 +1,8 @@
+![Build Status](http://cicd.dockovpn.io/build/cicd)
+![Build Time](http://cicd.dockovpn.io/built/cicd)
+[![Docker Pulls](https://img.shields.io/docker/pulls/alekslitvinenk/cicd-pipeline.svg)](https://hub.docker.com/r/alekslitvinenk/cicd-pipeline/)
+![GitHub](https://img.shields.io/github/license/alekslitvinenk/cicd)
+
 # 📦 CICD Pipeline
 
 A simple tool for build/test automation.
