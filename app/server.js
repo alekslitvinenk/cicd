@@ -1,6 +1,8 @@
 const https = require('https');
 const fs = require('fs');
 const port = 3000;
+const request = require('request');
+
 const pathPrefix = process.argv.slice(2)[0];
 const sslFilesDir = process.argv.slice(2)[1];
 
@@ -45,9 +47,10 @@ const server = https.createServer(options, (req, res) => {
       } else {
         // Dirty hack to convert "data" to string and sanitize it
         const status = (data + "").replace(/[\n\r]+/g, '');
-        res.statusCode = 307;
-        res.setHeader('Location', `https://img.shields.io/badge/${badge}-${status}-${getBadgeColor(badge, status)}.svg`);
-        res.end('');
+
+        const x = request(`https://img.shields.io/badge/${badge}-${status}-${getBadgeColor(badge, status)}.svg`);
+        req.pipe(x);
+        x.pipe(res);
       }
     })
   } else {

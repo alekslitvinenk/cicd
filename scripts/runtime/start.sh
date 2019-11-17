@@ -5,5 +5,7 @@ CUR_DIR=$APP_INSTALL_PATH/runtime
 $CUR_DIR/setup-docker.sh
 $CUR_DIR/setup-cicd.sh
 
-node "$CUR_DIR/app.js" "$APP_INSTALL_PATH/badges" "$APP_INSTALL_PATH/sslfiles"
+cd $CUR_DIR
+
+npm start "$APP_INSTALL_PATH/badges" "$APP_INSTALL_PATH/sslfiles"
 # exec bash
