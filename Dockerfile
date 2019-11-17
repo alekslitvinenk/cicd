@@ -13,5 +13,6 @@ RUN chmod -R 777 ${APP_INSTALL_PATH}
 RUN ${APP_INSTALL_PATH}/buildtime/init.sh
 
 EXPOSE 3000/tcp
+EXPOSE 3443/tcp
 
 ENTRYPOINT [ "start.sh" ]
