@@ -1,6 +1,8 @@
+const http = require('http');
 const https = require('https');
 const fs = require('fs');
 const port = 3000;
+const securePort = 3443;
 const request = require('request');
 
 const pathPrefix = process.argv.slice(2)[0];
@@ -20,17 +22,7 @@ const colorMap = {
   built: "lightgrey"
 }
 
-function getBadgeColor(badge, status) {
-  const badgeColors = colorMap[badge];
-
-  if (typeof badgeColors == "object") {
-    return badgeColors[status];
-  } else {
-    return badgeColors + ""
-  }
-}
-
-const server = https.createServer(options, (req, res) => {
+const requestHandler = (req, res) => {
   if (isBadgeUrl(req.url)) {
 
     const urlSegmenst = req.url.slice(1).split("/");
@@ -57,11 +49,17 @@ const server = https.createServer(options, (req, res) => {
     console.log(`isBadgeUrl: false`)
     render404(req, res)
   }
-});
+}
 
-server.listen(port, () => {
-  console.log(`Server running at http://localhost:${port}/`);
-});
+function getBadgeColor(badge, status) {
+  const badgeColors = colorMap[badge];
+
+  if (typeof badgeColors == "object") {
+    return badgeColors[status];
+  } else {
+    return badgeColors + ""
+  }
+}
 
 function isBadgeUrl(url) {
   return url.slice(1).split("/").length == 2;
@@ -72,3 +70,17 @@ function render404(req, res) {
   res.setHeader('Content-Type', 'text/plain');
   res.end(`Requested url "${req.url}" not found!`);
 }
+
+http
+  .createServer(options, requestHandler)
+  .listen(port, () => {
+      console.log(`Server running at http://localhost:${port}/`);
+    }
+  )
+
+https
+  .createServer(options, requestHandler)
+  .listen(securePort, () => {
+      console.log(`Server running at http://localhost:${port}/`);
+    }
+  )
