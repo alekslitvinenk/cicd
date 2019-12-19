@@ -19,7 +19,7 @@ const colorMap = {
     failing: "red"
   },
 
-  built: "lightgrey"
+  built: "green"
 }
 
 const requestHandler = (req, res) => {
