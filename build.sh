@@ -6,3 +6,4 @@ NEW_UUID=latest
 
 docker build -t alekslitvinenk/cicd-pipeline:$NEW_UUID --no-cache .
 docker push alekslitvinenk/cicd-pipeline:$NEW_UUID
+
