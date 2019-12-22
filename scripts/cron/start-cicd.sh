@@ -12,6 +12,7 @@ function buildOnce() {
     cd "$REPOS/$PROJECT"
 
     git pull
+    git checkout releases
 
     ./build.sh
 
