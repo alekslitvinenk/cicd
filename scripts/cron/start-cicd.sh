@@ -5,11 +5,12 @@ REPOS=$APP_INSTALL_PATH/repos
 BADGES=$APP_INSTALL_PATH/badges
 BUILD_BADGE="$BADGES/build"
 BUILT_BADGE="$BADGES/built"
+VERSION_BADGE="$BADGES/version"
 
 function buildOnce() {
     PROJECT="$1"
 
-    cd "$REPOS/$PROJECT"
+    cd "$REPOS/$PROJECT" || exit
 
     git pull
     git checkout releases
@@ -23,6 +24,7 @@ function buildOnce() {
     fi
 
     date > "$BUILT_BADGE/$PROJECT.txt"
+    cat ./VERSION > "$VERSION_BADGE/$PROJECT.txt"
 
     # Update bages (script yet has to be created)
 
@@ -30,7 +32,7 @@ function buildOnce() {
     echo " "
 }
 
-cd "$REPOS"
+cd "$REPOS" || exit
 
 for entry in $(ls -d *)
 do

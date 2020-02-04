@@ -14,7 +14,8 @@ const colorMap = {
     failing: "red"
   },
 
-  built: "green"
+  built: "green",
+  version: "blue"
 };
 
 const requestHandler = (req, res) => {
