@@ -6,6 +6,8 @@ BADGES=$APP_INSTALL_PATH/badges
 BUILD_BADGE="$BADGES/build"
 BUILT_BADGE="$BADGES/built"
 VERSION_BADGE="$BADGES/version"
+MAKE_FILE="Makefile"
+BUILD_FILE="build.sh"
 
 function buildOnce() {
     PROJECT="$1"
@@ -15,7 +17,15 @@ function buildOnce() {
     git pull
     git checkout releases
 
-    ./build.sh
+
+    if [ -f "$MAKE_FILE" ] then
+        make
+    elif [ -f "$BUILD_FILE" ] then
+        ./build.sh
+    else
+        # Throwing exit code from subshell to go negative path
+        $(exit 1)
+    fi
 
     if [ $? -eq 0 ]; then
         echo "passing" > "$BUILD_BADGE/$PROJECT.txt"
