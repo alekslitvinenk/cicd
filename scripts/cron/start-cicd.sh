@@ -6,6 +6,8 @@ BADGES=$APP_INSTALL_PATH/badges
 BUILD_BADGE="$BADGES/build"
 BUILT_BADGE="$BADGES/built"
 VERSION_BADGE="$BADGES/version"
+MAKE_FILE="Makefile"
+BUILD_FILE="build.sh"
 
 function buildOnce() {
     PROJECT="$1"
@@ -15,9 +17,19 @@ function buildOnce() {
     git pull
     git checkout releases
 
-    ./build.sh
+    RES=0
 
-    if [ $? -eq 0 ]; then
+    if [ -f "$MAKE_FILE" ]; then
+        make
+        RES="$?"
+    elif [ -f "$BUILD_FILE" ]; then
+        ./build.sh
+        RES="$?"
+    else
+        RES=1
+    fi
+
+    if [ $RES -eq 0 ]; then
         echo "passing" > "$BUILD_BADGE/$PROJECT.txt"
     else
         echo "failing" > "$BUILD_BADGE/$PROJECT.txt"
