@@ -17,17 +17,19 @@ function buildOnce() {
     git pull
     git checkout releases
 
+    RES=0
 
-    if [ -f "$MAKE_FILE" ] then
+    if [ -f "$MAKE_FILE" ]; then
         make
-    elif [ -f "$BUILD_FILE" ] then
+        RES="$?"
+    elif [ -f "$BUILD_FILE" ]; then
         ./build.sh
+        RES="$?"
     else
-        # Throwing exit code from subshell to go negative path
-        $(exit 1)
+        RES=1
     fi
 
-    if [ $? -eq 0 ]; then
+    if [ $RES -eq 0 ]; then
         echo "passing" > "$BUILD_BADGE/$PROJECT.txt"
     else
         echo "failing" > "$BUILD_BADGE/$PROJECT.txt"
