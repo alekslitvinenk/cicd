@@ -9,7 +9,7 @@ VERSION_BADGE="$BADGES/version"
 MAKE_FILE="Makefile"
 BUILD_FILE="build.sh"
 
-function buildOnce() {
+function processOnce() {
     PROJECT="$1"
 
     cd "$REPOS/$PROJECT" || exit
@@ -17,6 +17,15 @@ function buildOnce() {
     git pull
     git checkout releases
 
+    buildOnce && \
+    testOnce && \
+    deployOnce
+
+    # Magic
+    echo " "
+}
+
+function buildOnce() {
     RES=0
 
     if [ -f "$MAKE_FILE" ]; then
@@ -37,11 +46,20 @@ function buildOnce() {
 
     date > "$BUILT_BADGE/$PROJECT.txt"
     cat ./VERSION > "$VERSION_BADGE/$PROJECT.txt"
+}
 
-    # Update bages (script yet has to be created)
+function testOnce() {
+    if [ -f "$MAKE_FILE" ]; then
+        make test
+        RES="$?"
+    fi
+}
 
-    # Magic
-    echo " "
+function deployOnce() {
+    if [ -f "$MAKE_FILE" ]; then
+        make deploy
+        RES="$?"
+    fi
 }
 
 cd "$REPOS" || exit
@@ -49,5 +67,5 @@ cd "$REPOS" || exit
 for entry in $(ls -d *)
 do
     # Launch build job in a parallel shell
-    buildOnce "$entry" &
+    processOnce "$entry" &
 done
