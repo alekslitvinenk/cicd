@@ -2,12 +2,18 @@
 
 # Iterate all directories in $APP_INSTALL_PATH/repos
 REPOS=$APP_INSTALL_PATH/repos
+
 BADGES=$APP_INSTALL_PATH/badges
 BUILD_BADGE="$BADGES/build"
 BUILT_BADGE="$BADGES/built"
 VERSION_BADGE="$BADGES/version"
+TESTS_BADGE="$BADGES/tests"
+
+TESTS_REPORT=""
+
 MAKE_FILE="Makefile"
 BUILD_FILE="build.sh"
+VERSION_FILE="VERSION"
 
 function processOnce() {
     PROJECT="$1"
@@ -15,50 +21,53 @@ function processOnce() {
     cd "$REPOS/$PROJECT" || exit
 
     git pull
-    git checkout releases
+    git checkout releases || echo "Could not check out release branch."
 
     buildOnce && \
-    testOnce && \
-    deployOnce
+    testOnce
 
     # Magic
     echo " "
 }
 
 function buildOnce() {
-    RES=0
+    local BUILD_RES=0
 
     if [ -f "$MAKE_FILE" ]; then
         make
-        RES="$?"
+        REBUILD_RESS="$?"
     elif [ -f "$BUILD_FILE" ]; then
         ./build.sh
-        RES="$?"
+        BUILD_RES="$?"
     else
-        RES=1
+        BUILD_RES=1
     fi
 
-    if [ $RES -eq 0 ]; then
+    if [ $BUILD_RES -eq 0 ]; then
         echo "passing" > "$BUILD_BADGE/$PROJECT.txt"
     else
         echo "failing" > "$BUILD_BADGE/$PROJECT.txt"
     fi
 
     date > "$BUILT_BADGE/$PROJECT.txt"
-    cat ./VERSION > "$VERSION_BADGE/$PROJECT.txt"
-}
 
-function testOnce() {
-    if [ -f "$MAKE_FILE" ]; then
-        make test
-        RES="$?"
+    if [ -f "$VERSION_FILE" ]; then
+        cat "$VERSION_FILE" > "$VERSION_BADGE/$PROJECT.txt"
     fi
 }
 
-function deployOnce() {
+function testOnce() {
+    local TEST_RES=0
+
     if [ -f "$MAKE_FILE" ]; then
-        make deploy
-        RES="$?"
+        make test
+        TEST_RES="$?"
+    fi
+
+    if [ $TEST_RES -eq 0 ]; then
+        echo "passing" > "$TESTS_BADGE/$PROJECT.txt"
+    else
+        echo "failing" > "$TESTS_BADGE/$PROJECT.txt"
     fi
 }
 

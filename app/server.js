@@ -79,7 +79,7 @@ http
   );
 
 
-const options = {
+/*const options = {
   key: fs.readFileSync(`${sslFilesDir}/private.key`),
   cert: fs.readFileSync(`${sslFilesDir}/certificate.crt`)
 };
@@ -89,4 +89,4 @@ https
   .listen(securePort, () => {
       console.log(`Server running at http://localhost:${port}/`);
     }
-  );
+  );*/
