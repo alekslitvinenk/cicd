@@ -65,9 +65,12 @@ function testOnce() {
     fi
 
     if [ $TEST_RES -eq 0 ]; then
-        echo "passing" > "$TESTS_BADGE/$PROJECT.txt"
+        # Tests status should be read straight from tests report
+        # It's tests executor responsibility to generate tests report and put it into reports/tests folder
+        local status="passing"
+        echo "$status" > "$TESTS_BADGE/$PROJECT.txt"
     else
-        echo "failing" > "$TESTS_BADGE/$PROJECT.txt"
+        echo "not found" > "$TESTS_BADGE/$PROJECT.txt"
     fi
 }
 
