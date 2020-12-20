@@ -1,16 +1,6 @@
 #!/bin/bash
 
 # Iterate all directories in $APP_INSTALL_PATH/repos
-REPOS=$APP_INSTALL_PATH/repos
-
-BADGES=$APP_INSTALL_PATH/badges
-BUILD_BADGE="$BADGES/build"
-BUILT_BADGE="$BADGES/built"
-VERSION_BADGE="$BADGES/version"
-TESTS_BADGE="$BADGES/tests"
-
-TESTS_REPORT=""
-
 MAKE_FILE="Makefile"
 BUILD_FILE="build.sh"
 VERSION_FILE="VERSION"
@@ -21,7 +11,7 @@ function processOnce() {
     cd "$REPOS/$PROJECT" || exit
 
     git pull
-    git checkout releases || echo "Could not check out release branch."
+    git checkout releases || echo "Could not check out release branch"
 
     buildOnce && \
     testOnce
@@ -67,6 +57,9 @@ function testOnce() {
     if [ $TEST_RES -eq 0 ]; then
         # Tests status should be read straight from tests report
         # It's tests executor responsibility to generate tests report and put it into reports/tests folder
+
+        # Transform vendor-specific test report to generic app-native JSON format
+        
         local status="passing"
         echo "$status" > "$TESTS_BADGE/$PROJECT.txt"
     else

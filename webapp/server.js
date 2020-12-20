@@ -8,6 +8,10 @@ const request = require('request');
 const pathPrefix = process.argv.slice(2)[0];
 const sslFilesDir = process.argv.slice(2)[1];
 
+const sslKeyFile = process.env.SSL_KEY_FILE;
+const sslCertFile = process.env.SSL_CERT_FILE;
+const sslChainFile = process.env.SSL_CHAIN_FILE;
+
 const colorMap = {
   build: {
     passing: "green",
@@ -80,13 +84,17 @@ http
 
 
 const options = {
-  key: fs.readFileSync(`${sslFilesDir}/private.key`),
-  cert: fs.readFileSync(`${sslFilesDir}/certificate.crt`)
+  key: fs.readFileSync(`${sslFilesDir}/${sslKeyFile}`),
+  cert: fs.readFileSync(`${sslFilesDir}/${sslCertFile}`)
 };
+
+if (sslChainFile.length > 0) {
+  options["chain"] = [fs.readFileSync(`${sslFilesDir}/${sslChainFile}`)]
+}
 
 https
   .createServer(options, requestHandler)
   .listen(securePort, () => {
-      console.log(`Server running at http://localhost:${port}/`);
+      console.log(`Server running at https://localhost:${port}/`);
     }
   );

@@ -1,5 +1,5 @@
 #!/bin/bash
-
+REPOS=$APP_INSTALL_PATH/repos
 BADGES="$APP_INSTALL_PATH/badges"
 REPORTS="$APP_INSTALL_PATH/reports"
 
