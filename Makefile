@@ -1,33 +1,34 @@
-.PHONY: all build build-local build-edge build-branch test
+
+.PHONY: all build build-local build-edge test clean
 
 all: build
 
 build-local:
-	docker build -t alekslitvinenk/cicd-pipeline:latest --no-cache .
+	docker build -t alekslitvinenk/cicd-pipeline:local -t alekslitvinenk/cicd-pipeline:latest --no-cache .
 
 build-edge:
-	docker build -t alekslitvinenk/cicd-pipeline:edge --no-cache .
-	docker push alekslitvinenk/cicd-pipeline:edge
-
-# TODO: Rewrite to append baranch name as a docker tag
-build-edge2:
-	docker build -t alekslitvinenk/cicd-pipeline:edge2 --no-cache .
-	#docker push alekslitvinenk/cicd-pipeline:edge2
+	docker build -t alekslitvinenk/cicd-pipeline:edge4 --no-cache .
+	docker push alekslitvinenk/cicd-pipeline:edge4
 
 build: build-local
 	docker push alekslitvinenk/cicd-pipeline:latest
 
-test:
+test: build-local
 	docker run --privileged \
 	-v /var/run/docker.sock:/var/run/docker.sock \
 	-v ${PWD}/test-repos:/opt/cicd/repos \
-	-v ${PWD}/sslforfree:/opt/cicd/sslfiles \
+	-v ${PWD}/sslfiles:/opt/cicd/sslfiles \
+	-v ${PWD}/reports:/opt/cicd/reports \
 	-e DOCKER_USER=alekslitvinenk \
 	-e DOCKER_PASSWORD=Ichufef@17 \
 	-p 80:3000 \
 	-p 443:3443 \
 	--name cicd-test \
-	alekslitvinenk/cicd-pipeline &
+	--rm \
+	alekslitvinenk/cicd-pipeline:local &
 	sleep 10
 	docker stop cicd-test
-	docker rm cicd-test
+
+clean:
+	rm -rf target
+	rm -rf reports

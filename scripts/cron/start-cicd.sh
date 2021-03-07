@@ -24,8 +24,9 @@ function buildOnce() {
     local BUILD_RES=0
 
     if [ -f "$MAKE_FILE" ]; then
+        make clean
         make
-        REBUILD_RESS="$?"
+        BUILD_RES="$?"
     elif [ -f "$BUILD_FILE" ]; then
         ./build.sh
         BUILD_RES="$?"
@@ -56,10 +57,16 @@ function testOnce() {
 
     if [ $TEST_RES -eq 0 ]; then
         # Tests status should be read straight from tests report
-        # It's tests executor responsibility to generate tests report and put it into reports/tests folder
+        # Test are expected to be found in target/test-reports folder of a given repo
+        # At the moment only Scala/Java test reports are supported
 
+        # Cretae temp dir
+        TEMP_REPORT=$(mktemp /tmp/cicd-test.XXXXXX)
+        junit-merge --dir "tests-report" --out "$TEMP_REPORT"
+        report-converter $TEMP_REPORT "$REPORTS/$PROJECT.json"
         # Transform vendor-specific test report to generic app-native JSON format
-        
+        rm $TEMP_REPORT
+
         local status="passing"
         echo "$status" > "$TESTS_BADGE/$PROJECT.txt"
     else
