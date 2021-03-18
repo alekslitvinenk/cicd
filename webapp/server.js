@@ -18,6 +18,11 @@ const colorMap = {
     failing: "red"
   },
 
+  tests: {
+    passing: "green",
+    failing: "red"
+  },
+
   built: "green",
   version: "blue"
 };

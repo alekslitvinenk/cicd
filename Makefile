@@ -7,8 +7,8 @@ build-local:
 	docker build -t alekslitvinenk/cicd-pipeline:local -t alekslitvinenk/cicd-pipeline:latest --no-cache .
 
 build-edge:
-	docker build -t alekslitvinenk/cicd-pipeline:edge4 --no-cache .
-	docker push alekslitvinenk/cicd-pipeline:edge4
+	docker build -t alekslitvinenk/cicd-pipeline:edge6 --no-cache .
+	docker push alekslitvinenk/cicd-pipeline:edge6
 
 build: build-local
 	docker push alekslitvinenk/cicd-pipeline:latest

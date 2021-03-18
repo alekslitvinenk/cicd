@@ -8,8 +8,8 @@ npm init -y
 npm install request
 npm install --global xml-js junit-merge
 
-wget https://github.com/dockovpn/reports-converter/archive/v0.1.tar.gz
+wget "https://github.com/dockovpn/reports-converter/archive/$REPORT_CONVERTER_VERSION.tar.gz"
 
-tar xvfz v0.1.tar.gz
+tar xvfz "$REPORT_CONVERTER_VERSION.tar.gz"
 
 pip3 install -e reports-converter-0.1
