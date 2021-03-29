@@ -14,6 +14,7 @@ mkdir -p "$BUILD_BADGE"
 mkdir -p "$BUILT_BADGE"
 mkdir -p "$VERSION_BADGE"
 mkdir -p "$TESTS_BADGE"
+mkdir -p "$REPORTS"
 # mkdir -p "$TESTS_REPORT"
 
 # Schedule crone job

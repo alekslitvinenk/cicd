@@ -5,12 +5,20 @@ const port = 3000;
 const securePort = 3443;
 const request = require('request');
 
-const pathPrefix = process.argv.slice(2)[0];
+const badgesDir = process.argv.slice(2)[0];
 const sslFilesDir = process.argv.slice(2)[1];
+const templatesDir = process.argv.slice(2)[2];
+const reportsDir = process.argv.slice(2)[3];
 
 const sslKeyFile = process.env.SSL_KEY_FILE;
 const sslCertFile = process.env.SSL_CERT_FILE;
 const sslChainFile = process.env.SSL_CHAIN_FILE;
+
+const reportsPath = "reports"
+
+const pug = require('pug');
+const compiledFunction = pug.compileFile(`${templatesDir}/report-view.pug`);
+
 
 const colorMap = {
   build: {
@@ -28,7 +36,32 @@ const colorMap = {
 };
 
 const requestHandler = (req, res) => {
-  if (isBadgeUrl(req.url)) {
+
+  if (isReportUrl(req.url)) {
+    const urlSegments = req.url.slice(1).split("/");
+    const app = urlSegments[1];
+
+    console.log("Reports");
+    console.log(`App: ${app}`);
+
+    fs.readFile(`${reportsDir}/${app}.json`, (err, data) => {
+      if (err) {
+        console.log(`Err: ${err}`);
+        render404(req, res);
+      } else {
+        // Dirty hack to convert "data" to string and sanitize it
+        const jsonStr = (data + "").replace(/[\n\r]+/g, '');
+
+        const renderedView = compiledFunction({jsonData: jsonStr});
+
+        res.statusCode = 200;
+        res.setHeader('content-type', 'text/html');
+        res.setHeader('cache-control', 'no-store');
+        res.write(renderedView);
+        res.end();
+      }
+    });
+  } else if (isBadgeUrl(req.url)) {
 
     const urlSegments = req.url.slice(1).split("/");
     const badge = urlSegments[0];
@@ -37,7 +70,7 @@ const requestHandler = (req, res) => {
     console.log(`Badge: ${badge}`);
     console.log(`App: ${app}`);
 
-    fs.readFile(`${pathPrefix}/${badge}/${app}.txt`, (err, data) => {
+    fs.readFile(`${badgesDir}/${badge}/${app}.txt`, (err, data) => {
       if (err) {
         console.log(`Err: ${err}`);
         render404(req, res);
@@ -68,6 +101,12 @@ function getBadgeColor(badge, status) {
   } else {
     return badgeColors + ""
   }
+}
+
+function isReportUrl(url) {
+  const segments = url.slice(1).split("/");
+
+  return segments.length == 2 && segments[0] == reportsPath
 }
 
 function isBadgeUrl(url) {

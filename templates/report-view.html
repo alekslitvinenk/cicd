@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Test Report</title>
+    <meta name="description" content="test report">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <style>
+        .report {
+            background-color: #dbecfb;
+            width: fit-content;
+            padding: 15px;
+            border-radius: 10px;
+        }
+
+        .suite {
+            width: fit-content;
+            padding: 10px;
+            background-color: azure;
+            margin-top: 15px;
+            border-radius: 7px;
+        }
+
+        .suite:nth-child(1) {
+            margin: 0;
+        }
+
+        .suiteBlock {
+            width: 250px;
+            height: 40px;
+            background-color: gray;
+            border-radius: 8px;
+            text-align: center;
+            padding-top: 11px;
+            box-sizing: border-box;
+            margin-bottom: 8px;
+        }
+
+        .case {
+            width: 200px;
+            height: 30px;
+            background-color: grey;
+            border-radius: 8px;
+            text-align: center;
+            padding-top: 7px;
+            box-sizing: border-box;
+            margin-top: 2px;
+        }
+
+        .case.passes {
+            background-color: green;
+        }
+
+        .case.fails {
+            background-color: red;
+        }
+
+        .case.skipped {
+            background-color: yellow;
+        }
+    </style>
+    <script>
+        var jsonReport = {
+            "testsuites": [
+                {
+                    "errors": 0,
+                    "failures": 0,
+                    "name": "TestSuite",
+                    "skipped": 0,
+                    "testcases": [
+                        {
+                            "classname": "TestCase",
+                            "name": "TestCase",
+                            "passes": true,
+                            "time": "0.017"
+                        },
+                        {
+                            "classname": "TestCase2",
+                            "name": "TestCase2",
+                            "passes": false,
+                            "time": "0.017"
+                        }
+                    ],
+                    "tests": 1,
+                    "time": "0.017",
+                    "timestamp": "2021-02-21T16:37:14"
+                },
+                {
+                    "errors": 0,
+                    "failures": 0,
+                    "name": "TestSuite",
+                    "skipped": 0,
+                    "testcases": [
+                        {
+                            "classname": "TestCase",
+                            "name": "TestCase",
+                            "passes": true,
+                            "time": "0.017"
+                        },
+                        {
+                            "classname": "TestCase2",
+                            "name": "TestCase2",
+                            "passes": false,
+                            "time": "0.017"
+                        }
+                    ],
+                    "tests": 1,
+                    "time": "0.017",
+                    "timestamp": "2021-02-21T16:37:14"
+                }
+            ]
+        }
+    </script>
+    <script
+        src="https://code.jquery.com/jquery-3.6.0.min.js"
+        integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+        crossorigin="anonymous">
+    </script>
+    <script>
+        $(function() {
+            console.log("Data: ")
+            console.log(jsonReport)
+
+            var frag = $(document.createDocumentFragment())
+
+            jsonReport.testsuites.forEach(testsuite => {
+                var testsuiteHtml = $('<div class="suite"></div>')
+                testsuiteHtml.append('<div class="suiteBlock">' + testsuite.name + '</div>')
+
+                var testCasesHtml = $('<div class="cases"></div>')
+                testsuiteHtml.append(testCasesHtml)
+
+                testsuite.testcases.forEach(testcase => {
+                    var testcaseHtml = $('<div class="case">' + testcase.name + '</div>')
+                    var passesClass = testcase.passes ? "passes" : "fails"
+                    testcaseHtml.addClass(passesClass)
+                    testCasesHtml.append(testcaseHtml)
+
+                    testCasesHtml.append(testcaseHtml)
+                })
+
+                frag.append(testsuiteHtml)
+            });
+
+            $(".report").append(frag)
+        })
+    </script>
+    <!--[if lt IE 9]> <script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script> <![endif]-->
+</head>
+<body>
+    
+    <div class="wrap">
+        <main role="main">
+
+            <div class="report">
+            </div>
+
+        </main>
+    </div>
+
+</body>
+</html>

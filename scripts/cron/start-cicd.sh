@@ -62,9 +62,9 @@ function testOnce() {
 
         # Cretae temp dir
         TEMP_REPORT=$(mktemp /tmp/cicd-test.XXXXXX)
-        junit-merge --dir "tests-report" --out "$TEMP_REPORT"
+        junit-merge --dir "target/test-reports" --out "$TEMP_REPORT"
         # Transform vendor-specific test report to generic app-native JSON format
-        report-converter $TEMP_REPORT "$REPORTS/$PROJECT.json" > "$TESTS_BADGE/$PROJECT.txt"
+        report-converter $TEMP_REPORT "$REPORTS/$PROJECT.json" --status > "$TESTS_BADGE/$PROJECT.txt"
         rm $TEMP_REPORT
 
         local status="passing"
