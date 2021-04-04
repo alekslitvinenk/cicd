@@ -52,7 +52,7 @@ const requestHandler = (req, res) => {
         // Dirty hack to convert "data" to string and sanitize it
         const jsonStr = (data + "").replace(/[\n\r]+/g, '');
 
-        const renderedView = compiledFunction({jsonData: jsonStr});
+        const renderedView = compiledFunction({jsonData: jsonStr, appName: app});
 
         res.statusCode = 200;
         res.setHeader('content-type', 'text/html');

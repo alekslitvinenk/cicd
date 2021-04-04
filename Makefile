@@ -25,9 +25,9 @@ test: build-local
 	-p 443:3443 \
 	--name cicd-test \
 	--rm \
-	alekslitvinenk/cicd-pipeline:local
-	#sleep 10
-	#docker stop cicd-test
+	alekslitvinenk/cicd-pipeline:local &
+	sleep 10
+	docker stop cicd-test
 	# test badges and http endpoints
 
 clean:
