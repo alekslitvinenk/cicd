@@ -4,7 +4,7 @@ LABEL maintainer="Alexander Litvinenko <array.shift@yahoo.com>"
 
 ENV APP_NAME cicd
 ENV APP_INSTALL_PATH /opt/${APP_NAME}
-ENV REPORT_CONVERTER_VERSION 0.2
+ENV REPORT_CONVERTER_VERSION 0.3
 
 ENV SSL_CERT_FILE certificate.crt
 ENV SSL_KEY_FILE private.key

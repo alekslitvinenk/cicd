@@ -39,45 +39,44 @@
             font-size: xx-large;
         }
 
-        .report {
-            background-color: #dbecfb;
-            width: fit-content;
-            padding: 15px;
-            border-radius: 10px;
-        }
-
         .suite {
-            width: fit-content;
+            width: 350px;
             padding: 10px;
-            background-color: azure;
-            margin-top: 15px;
+            padding-bottom: 0;
+            background-color: lightcyan;
             border-radius: 7px;
-        }
-
-        .suite:nth-child(1) {
-            margin: 0;
+            display: inline-block;
+            margin: 1em;
+            vertical-align: top;
+            border-style: solid;
+            border-width: thin;
+            -moz-box-shadow: 10px 10px 5px 0px rgba(0,0,0,0.75);
+            box-shadow: 6px 6px 11px 0px rgb(0 0 0 / 64%);
+            -webkit-box-shadow: 6px 6px 11px 0px rgb(0 0 0 / 64%);
+            -moz-box-shadow: 6px 6px 11px 0px rgba(0,0,0,0.64);
         }
 
         .suiteBlock {
-            width: 250px;
-            height: 40px;
-            background-color: gray;
+            min-height: 2.5em;
+            background-color: purple;
             border-radius: 8px;
             text-align: center;
             padding-top: 11px;
             box-sizing: border-box;
-            margin-bottom: 8px;
+            margin-bottom: 0.85em;
+            color: white;
+            font-style: italic;
+            font-weight: 600;
         }
 
         .case {
-            width: 200px;
-            height: 30px;
             background-color: grey;
             border-radius: 8px;
             text-align: center;
-            padding-top: 7px;
+            padding: 7px;
             box-sizing: border-box;
-            margin-top: 2px;
+            margin: 0.35em 10px;
+            min-height: 2em;
         }
 
         .case.passes {
@@ -93,57 +92,7 @@
         }
     </style>
     <script>
-        var jsonReport = {
-            "testsuites": [
-                {
-                    "errors": 0,
-                    "failures": 0,
-                    "name": "TestSuite",
-                    "skipped": 0,
-                    "testcases": [
-                        {
-                            "classname": "TestCase",
-                            "name": "TestCase",
-                            "passes": true,
-                            "time": "0.017"
-                        },
-                        {
-                            "classname": "TestCase2",
-                            "name": "TestCase2",
-                            "passes": false,
-                            "time": "0.017"
-                        }
-                    ],
-                    "tests": 1,
-                    "time": "0.017",
-                    "timestamp": "2021-02-21T16:37:14"
-                },
-                {
-                    "errors": 0,
-                    "failures": 0,
-                    "name": "TestSuite",
-                    "skipped": 0,
-                    "testcases": [
-                        {
-                            "classname": "TestCase",
-                            "name": "TestCase",
-                            "passes": true,
-                            "time": "0.017"
-                        },
-                        {
-                            "classname": "TestCase2",
-                            "name": "TestCase2",
-                            "passes": false,
-                            "time": "0.017"
-                        }
-                    ],
-                    "tests": 1,
-                    "time": "0.017",
-                    "timestamp": "2021-02-21T16:37:14"
-                }
-            ]
-        }
-
+        var jsonReport = {}
         var appName = "my-crasy-app"
     </script>
     <script
@@ -261,7 +210,8 @@
 
             jsonReport.testsuites.forEach(testsuite => {
                 var testsuiteHtml = $('<div class="suite"></div>');
-                testsuiteHtml.append('<div class="suiteBlock">' + testsuite.name + '</div>');
+                var testsuiteName = testsuite.name.split(".").pop()
+                testsuiteHtml.append('<div class="suiteBlock">' + testsuiteName + '</div>');
 
                 var testCasesHtml = $('<div class="cases"></div>');
                 testsuiteHtml.append(testCasesHtml);
@@ -296,6 +246,8 @@
             //for (var i = 0; i < appName.length; i++) {code += appName.charCodeAt(i)};
 
             render_identicon(canvas, code, 64);
+
+            $("#report-name").text(appName);
         })
     </script>
     <!--[if lt IE 9]> <script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script> <![endif]-->
@@ -306,7 +258,7 @@
             <canvas id="identicon" width="64" height="64"></canvas>
         </div>
         <div class="reportTitle">
-            <p>docker-openvpn</p>
+            <p id="report-name">report-name</p>
         </div>
     </header>
     <div class="wrap">
