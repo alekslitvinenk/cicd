@@ -1,7 +1,10 @@
 run.sh
 sslforfree/
+sslfiles
 node_modules/
 package-lock.json
 package.json
 .idea/
 cicd.iml
+**/target
+reports

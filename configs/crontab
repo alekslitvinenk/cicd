@@ -6,5 +6,5 @@ SHELL=/bin/bash
 0       2       *       *       *       run-parts /etc/periodic/daily
 0       3       *       *       6       run-parts /etc/periodic/weekly
 0       5       1       *       *       run-parts /etc/periodic/monthly
-
-0       *     *       *       *       $APP_INSTALL_PATH/cron/start-cicd.sh
+0       *       *       *       *       $APP_INSTALL_PATH/cron/start-cicd.sh
+30      0       *       *       *       $APP_INSTALL_PATH/cron/cleanup.sh

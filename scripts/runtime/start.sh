@@ -7,5 +7,5 @@ CUR_DIR=$APP_INSTALL_PATH/runtime
 
 cd "$CUR_DIR" || exit
 
-npm start "$APP_INSTALL_PATH/badges" "$APP_INSTALL_PATH/sslfiles"
+npm start "$APP_INSTALL_PATH/badges" "$APP_INSTALL_PATH/sslfiles" "$APP_INSTALL_PATH/templates" "$APP_INSTALL_PATH/reports"
 # exec bash

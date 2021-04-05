@@ -1,47 +1,77 @@
 #!/bin/bash
 
 # Iterate all directories in $APP_INSTALL_PATH/repos
-REPOS=$APP_INSTALL_PATH/repos
-BADGES=$APP_INSTALL_PATH/badges
-BUILD_BADGE="$BADGES/build"
-BUILT_BADGE="$BADGES/built"
-VERSION_BADGE="$BADGES/version"
 MAKE_FILE="Makefile"
 BUILD_FILE="build.sh"
+VERSION_FILE="VERSION"
 
-function buildOnce() {
+function processOnce() {
     PROJECT="$1"
 
     cd "$REPOS/$PROJECT" || exit
 
     git pull
-    git checkout releases
+    git checkout releases || echo "Could not check out release branch"
 
-    RES=0
+    buildOnce && \
+    testOnce
+
+    # Magic
+    echo " "
+}
+
+function buildOnce() {
+    local BUILD_RES=0
 
     if [ -f "$MAKE_FILE" ]; then
+        make clean
         make
-        RES="$?"
+        BUILD_RES="$?"
     elif [ -f "$BUILD_FILE" ]; then
         ./build.sh
-        RES="$?"
+        BUILD_RES="$?"
     else
-        RES=1
+        BUILD_RES=1
     fi
 
-    if [ $RES -eq 0 ]; then
+    if [ $BUILD_RES -eq 0 ]; then
         echo "passing" > "$BUILD_BADGE/$PROJECT.txt"
     else
         echo "failing" > "$BUILD_BADGE/$PROJECT.txt"
     fi
 
     date > "$BUILT_BADGE/$PROJECT.txt"
-    cat ./VERSION > "$VERSION_BADGE/$PROJECT.txt"
 
-    # Update bages (script yet has to be created)
+    if [ -f "$VERSION_FILE" ]; then
+        cat "$VERSION_FILE" > "$VERSION_BADGE/$PROJECT.txt"
+    fi
+}
 
-    # Magic
-    echo " "
+function testOnce() {
+    local TEST_RES=0
+
+    if [ -f "$MAKE_FILE" ]; then
+        make test
+        TEST_RES="$?"
+    fi
+
+    if [ $TEST_RES -eq 0 ]; then
+        # Tests status should be read straight from tests report
+        # Test are expected to be found in target/test-reports folder of a given repo
+        # At the moment only Scala/Java test reports are supported
+
+        # Cretae temp dir
+        TEMP_REPORT=$(mktemp /tmp/cicd-test.XXXXXX)
+        junit-merge --dir "target/test-reports" --out "$TEMP_REPORT"
+        # Transform vendor-specific test report to generic app-native JSON format
+        report-converter $TEMP_REPORT "$REPORTS/$PROJECT.json" --status > "$TESTS_BADGE/$PROJECT.txt"
+        rm $TEMP_REPORT
+
+        local status="passing"
+        echo "$status" > "$TESTS_BADGE/$PROJECT.txt"
+    else
+        echo "not found" > "$TESTS_BADGE/$PROJECT.txt"
+    fi
 }
 
 cd "$REPOS" || exit
@@ -49,5 +79,5 @@ cd "$REPOS" || exit
 for entry in $(ls -d *)
 do
     # Launch build job in a parallel shell
-    buildOnce "$entry" &
+    processOnce "$entry" &
 done
