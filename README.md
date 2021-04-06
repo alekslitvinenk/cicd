@@ -1,3 +1,4 @@
+![Build Status](http://cicd.dockovpn.io/version/cicd)
 ![Build Status](http://cicd.dockovpn.io/build/cicd)
 ![Build Time](http://cicd.dockovpn.io/built/cicd)
 [![Docker Pulls](https://img.shields.io/docker/pulls/alekslitvinenk/cicd-pipeline.svg)](https://hub.docker.com/r/alekslitvinenk/cicd-pipeline/)
