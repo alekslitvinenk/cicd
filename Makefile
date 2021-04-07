@@ -13,8 +13,8 @@ build-edge:
 build: build-local
 	docker push alekslitvinenk/cicd-pipeline:latest
 
-test: build-local
-	docker run --privileged \
+test:
+	# docker run --privileged \
 	-v /var/run/docker.sock:/var/run/docker.sock \
 	-v ${PWD}/test-repos:/opt/cicd/repos \
 	-v ${PWD}/sslfiles:/opt/cicd/sslfiles \
@@ -26,9 +26,10 @@ test: build-local
 	--name cicd-test \
 	--rm \
 	alekslitvinenk/cicd-pipeline:local &
-	sleep 10
-	docker stop cicd-test
+	# sleep 10
+	# docker stop cicd-test
 	# test badges and http endpoints
+	# NOTE: enable again when https://github.com/alekslitvinenk/cicd/issues/31 done
 
 clean:
 	rm -rf target
