@@ -10,8 +10,6 @@ const sslFilesDir = process.argv.slice(2)[1];
 const templatesDir = process.argv.slice(2)[2];
 const reportsDir = process.argv.slice(2)[3];
 
-console.dir(process.env.START_HTTPS_SERVER)
-
 const startHttpsServer = process.env.START_HTTPS_SERVER == "true"
 const sslKeyFile = process.env.SSL_KEY_FILE;
 const sslCertFile = process.env.SSL_CERT_FILE;
