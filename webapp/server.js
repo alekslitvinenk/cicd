@@ -10,6 +10,9 @@ const sslFilesDir = process.argv.slice(2)[1];
 const templatesDir = process.argv.slice(2)[2];
 const reportsDir = process.argv.slice(2)[3];
 
+console.dir(process.env.START_HTTPS_SERVER)
+
+const startHttpsServer = process.env.START_HTTPS_SERVER == "true"
 const sslKeyFile = process.env.SSL_KEY_FILE;
 const sslCertFile = process.env.SSL_CERT_FILE;
 const sslChainFile = process.env.SSL_CHAIN_FILE;
@@ -126,19 +129,20 @@ http
     }
   );
 
+if (startHttpsServer) {
+  const options = {
+    key: fs.readFileSync(`${sslFilesDir}/${sslKeyFile}`),
+    cert: fs.readFileSync(`${sslFilesDir}/${sslCertFile}`)
+  };
 
-const options = {
-  key: fs.readFileSync(`${sslFilesDir}/${sslKeyFile}`),
-  cert: fs.readFileSync(`${sslFilesDir}/${sslCertFile}`)
-};
+  if (sslChainFile.length > 0) {
+    options["chain"] = [fs.readFileSync(`${sslFilesDir}/${sslChainFile}`)]
+  }
 
-if (sslChainFile.length > 0) {
-  options["chain"] = [fs.readFileSync(`${sslFilesDir}/${sslChainFile}`)]
+  https
+    .createServer(options, requestHandler)
+    .listen(securePort, () => {
+        console.log(`Server running at https://localhost:${port}/`);
+      }
+    )
 }
-
-https
-  .createServer(options, requestHandler)
-  .listen(securePort, () => {
-      console.log(`Server running at https://localhost:${port}/`);
-    }
-  );
