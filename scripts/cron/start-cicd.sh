@@ -51,11 +51,14 @@ function testOnce() {
     local TEST_RES=0
 
     if [ -f "$MAKE_FILE" ]; then
+        echo "running" > "$TESTS_BADGE/$PROJECT.txt"
+        echo "{ \"testsuites\": [] }" > "$REPORTS/$PROJECT.json"
+
         make test
-        TEST_RES="$?"
+        TEST_RES=$(ls target/test-reports/TEST* | wc -l)
     fi
 
-    if [ $TEST_RES -eq 0 ]; then
+    if (($TEST_RES > 0)); then
         # Tests status should be read straight from tests report
         # Test are expected to be found in target/test-reports folder of a given repo
         # At the moment only Scala/Java test reports are supported
@@ -67,8 +70,6 @@ function testOnce() {
         report-converter $TEMP_REPORT "$REPORTS/$PROJECT.json" --status > "$TESTS_BADGE/$PROJECT.txt"
         rm $TEMP_REPORT
 
-        local status="passing"
-        echo "$status" > "$TESTS_BADGE/$PROJECT.txt"
     else
         echo "not found" > "$TESTS_BADGE/$PROJECT.txt"
     fi
