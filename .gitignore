@@ -8,3 +8,4 @@ package.json
 cicd.iml
 **/target
 reports
+.vscode
