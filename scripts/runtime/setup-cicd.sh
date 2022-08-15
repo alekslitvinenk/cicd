@@ -19,6 +19,8 @@ mkdir -p "$REPORTS"
 
 # Schedule crone job
 "$APP_INSTALL_PATH"/cron/start-cicd.sh
+# k8s startup propbe
+touch "$APP_INSTALL_PATH"/.startup
 
 # Running Cron daemn as a child makes all the exported paths here available to it 
 crond

@@ -10,7 +10,8 @@ const sslFilesDir = process.argv.slice(2)[1];
 const templatesDir = process.argv.slice(2)[2];
 const reportsDir = process.argv.slice(2)[3];
 
-const startHttpsServer = process.env.START_HTTPS_SERVER === "true"
+const startHttpsServer = process.env.START_HTTPS_SERVER === "true";
+const appInstallPath = process.env.APP_INSTALL_PATH;
 const sslKeyFile = process.env.SSL_KEY_FILE;
 const sslCertFile = process.env.SSL_CERT_FILE;
 const sslChainFile = process.env.SSL_CHAIN_FILE;
@@ -88,6 +89,22 @@ const requestHandler = (req, res) => {
         });
       }
     })
+  } else if (req.url == "/health" ) {
+    const buildDir = `${appInstallPath}/badges/build`
+    fs.readdir(buildDir, (err, files) => {
+      console.log(`Reading dir: ${buildDir}`);
+      console.log(err);
+
+      const statusOk = files.filter(fp => fp.endsWith(".txt"))
+        .map(path => fs.readFileSync(`${buildDir}/${path}`) + "")
+        .map(res => res.trimEnd())
+        .every(res => res === "passing");
+      
+      res.statusCode = statusOk === true ? 200 : 503;
+      res.setHeader('content-type', 'text/html');
+      res.setHeader('cache-control', 'no-store');
+      res.end(statusOk + "");
+    });
   } else {
     console.log(`isBadgeUrl: false`);
     render404(req, res);
