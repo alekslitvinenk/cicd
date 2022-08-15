@@ -1,6 +1,6 @@
 #!/bin/sh
 
-apk add --no-cache git netcat-openbsd nodejs npm bash make python3
+apk add --no-cache git iptables netcat-openbsd nodejs npm bash make python3
 
 cd $APP_INSTALL_PATH/runtime
 

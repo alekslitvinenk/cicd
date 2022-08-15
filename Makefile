@@ -7,8 +7,8 @@ build-local:
 	docker build --progress=plain -t alekslitvinenk/cicd-pipeline:local -t alekslitvinenk/cicd-pipeline:latest --no-cache .
 
 build-edge:
-	docker build -t alekslitvinenk/cicd-pipeline:edge15 --no-cache .
-	docker push alekslitvinenk/cicd-pipeline:edge15
+	docker build -t alekslitvinenk/cicd-pipeline:edge34 --no-cache .
+	docker push alekslitvinenk/cicd-pipeline:edge34
 
 build: build-local
 	docker push alekslitvinenk/cicd-pipeline:latest
@@ -26,10 +26,10 @@ test:
 	-p 443:3443 \
 	--name cicd-test \
 	--rm \
-	alekslitvinenk/cicd-pipeline:local &
+	alekslitvinenk/cicd-pipeline:edge34 &
 	sleep 10
 	docker stop cicd-test
-	# test badges and http endpoints
+	test badges and http endpoints
 
 clean:
 	rm -rf target

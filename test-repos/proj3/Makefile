@@ -9,4 +9,4 @@ test:
 	@echo "Testing proj3 with Makefile"
 
 clean:
-	@Echo "Cleaning after ourselves"
+	@echo "Cleaning after ourselves"

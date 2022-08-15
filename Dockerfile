@@ -10,6 +10,7 @@ ENV START_HTTPS_SERVER true
 ENV SSL_CERT_FILE certificate.crt
 ENV SSL_KEY_FILE private.key
 ENV SSL_CHAIN_FILE ""
+ENV START_CRON true
 
 COPY scripts ${APP_INSTALL_PATH}
 COPY configs ${APP_INSTALL_PATH}
@@ -21,6 +22,5 @@ RUN chmod -R 777 ${APP_INSTALL_PATH}
 RUN ${APP_INSTALL_PATH}/buildtime/init.sh
 
 EXPOSE 3000/tcp
-EXPOSE 3443/tcp
 
 ENTRYPOINT [ "start.sh" ]
